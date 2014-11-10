@@ -9,10 +9,12 @@ import random
 
 # Deliberately terrible code for teaching purposes
 
-boids_x=[random.uniform(-450,50.0) for x in range(50)]
-boids_y=[random.uniform(300.0,600.0) for x in range(50)]
-boid_x_velocities=[random.uniform(0,10.0) for x in range(50)]
-boid_y_velocities=[random.uniform(-20.0,20.0) for x in range(50)]
+boids_number = 50
+
+boids_x=[random.uniform(-450,50.0) for x in range(boids_number)]
+boids_y=[random.uniform(300.0,600.0) for x in range(boids_number)]
+boid_x_velocities=[random.uniform(0,10.0) for x in range(boids_number)]
+boid_y_velocities=[random.uniform(-20.0,20.0) for x in range(boids_number)]
 boids=(boids_x,boids_y,boid_x_velocities,boid_y_velocities)
 
 def update_boids(boids):
