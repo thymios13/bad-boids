@@ -5,6 +5,7 @@ for use as an exercise on refactoring.
 
 from matplotlib import pyplot as plt
 from matplotlib import animation
+from numpy import power
 import random
 
 
@@ -35,11 +36,12 @@ def update_boids(boids):
             xvs[i]+=(xs[j]-xs[i])*0.01/len(xs)
             yvs[i]+=(ys[j]-ys[i])*0.01/len(xs)
             # Fly away from nearby boids
-            if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < 100:
+            tmp_velocity = power((xs[j]-xs[i]),2) + power((ys[j]-ys[i]),2)
+            if tmp_velocity < 100:
                 xvs[i]+=(xs[i]-xs[j])
                 yvs[i]+=(ys[i]-ys[j])
             # Try to match speed with nearby boids
-            if (xs[j]-xs[i])**2 + (ys[j]-ys[i])**2 < 10000:
+            elif tmp_velocity < 10000:
                 xvs[i]+=(xvs[j]-xvs[i])*0.125/len(xs)
                 yvs[i]+=(yvs[j]-yvs[i])*0.125/len(xs)
         # Move according to velocities
