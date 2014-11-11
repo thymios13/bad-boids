@@ -23,18 +23,19 @@ def initialize_boids(boids_number):
 
     return boids_x, boids_y, boid_x_velocities, boid_y_velocities
 
-
-boids = initialize_boids(50)    # Setting up the initial number of boids
+# Number and positions/velocities of boids initialization
+bois_number = 50
+boids = initialize_boids(bois_number)
 
 
 def update_boids(boids):
     xs,ys,xvs,yvs=boids
-
-    for i in range(len(xs)):
-        for j in range(len(xs)):
+    boids_number = len(xs)
+    for i in range(bois_number):
+        for j in range(bois_number):
             # Fly towards the middle
-            xvs[i]+=(xs[j]-xs[i])*0.01/len(xs)
-            yvs[i]+=(ys[j]-ys[i])*0.01/len(xs)
+            xvs[i]+=(xs[j]-xs[i])*0.01/boids_number
+            yvs[i]+=(ys[j]-ys[i])*0.01/boids_number
             # Fly away from nearby boids
             tmp_velocity = power((xs[j]-xs[i]),2) + power((ys[j]-ys[i]),2)
             if tmp_velocity < 100:
@@ -42,8 +43,8 @@ def update_boids(boids):
                 yvs[i]+=(ys[i]-ys[j])
             # Try to match speed with nearby boids
             elif tmp_velocity < 10000:
-                xvs[i]+=(xvs[j]-xvs[i])*0.125/len(xs)
-                yvs[i]+=(yvs[j]-yvs[i])*0.125/len(xs)
+                xvs[i]+=(xvs[j]-xvs[i])*0.125/boids_number
+                yvs[i]+=(yvs[j]-yvs[i])*0.125/boids_number
         # Move according to velocities
         xs[i]+=xvs[i]
         ys[i]+=yvs[i]
