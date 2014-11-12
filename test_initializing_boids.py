@@ -1,8 +1,8 @@
 from nose.tools import assert_equal
 from initializing_boids import initialize_boids
+from boids import boids_number
 
-boids_number = 50 # Define the number of boids to be tested
-boids_x_positions, boids_y_positions, boids_x_velocities, boids_y_velocities = initialize_boids(50)
+boids_x_positions, boids_y_positions, boids_x_velocities, boids_y_velocities = initialize_boids(boids_number)
 
 def test_that_returns_four_vectors():
     assert_equal(len(initialize_boids(boids_number)),4)
