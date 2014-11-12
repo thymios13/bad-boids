@@ -6,22 +6,7 @@ for use as an exercise on refactoring.
 from matplotlib import pyplot as plt
 from matplotlib import animation
 from numpy import power
-import random
-
-
-def initialize_boids(boids_number):
-    boids_x_positions=[]
-    boids_y_positions=[]
-    boid_x_velocities=[]
-    boid_y_velocities=[]
-
-    for x in range(boids_number):
-        boids_x_positions.append(random.uniform(-450,50.0))
-        boids_y_positions.append(random.uniform(300.0,600.0))
-        boid_x_velocities.append(random.uniform(0,10.0))
-        boid_y_velocities.append(random.uniform(-20.0,20.0))
-
-    return boids_x_positions, boids_y_positions, boid_x_velocities, boid_y_velocities
+from initializing_boids import initialize_boids
 
 # Number and positions/velocities of boids initialization
 bois_number = 50
@@ -50,17 +35,14 @@ def update_boids(boids):
         y_positions[i]+=y_velocities[i]
 
 
+# Boids Animation
 figure=plt.figure()
 axes=plt.axes(xlim=(-500,1500), ylim=(-500,1500))
 scatter=axes.scatter(boids[0],boids[1])
-
 def animate(frame):
    update_boids(boids)
    scatter.set_offsets(zip(boids[0],boids[1]))
-
-
-anim = animation.FuncAnimation(figure, animate,
-                               frames=50, interval=50)
+anim = animation.FuncAnimation(figure, animate, frames=50, interval=50)
 
 if __name__ == "__main__":
     plt.show()
