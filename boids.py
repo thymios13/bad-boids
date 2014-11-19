@@ -6,43 +6,55 @@ for use as an exercise on refactoring.
 import random
 from numpy import array
 
-# Will now add an Eagle to Boids
-
 class Boid(object):
-    def __init__(self,x,y,xv,yv,owner,species="Starling"):
+    def __init__(self,x,y,xv,yv,owner):
         self.position=array([x,y])
         self.velocity=array([xv,yv])
         self.owner=owner
-        self.species=species
+        self.color = (0,0,1)
 
-    def interaction(self,other):
+    def interaction(self, other):
         delta_v=array([0.0,0.0])
         separation=other.position-self.position
         separation_sq=separation.dot(separation)
  
-        if other.species=="Eagle":
+        if isinstance(other, Eagle):
             # Flee the Eagle
             if separation_sq < self.owner.eagle_avoidance_radius**2:
                 delta_v-=(separation*self.owner.eagle_fear)/separation.dot(separation)
                 return delta_v
 
-        if self.species=="Eagle":
-            # Hunt the boids
-            delta_v+=separation*self.owner.eagle_hunt_strength
-        else:
-            # Fly towards the middle
-            delta_v+=separation*self.owner.flock_attraction
-            
-            # Fly away from nearby boids
-            if separation_sq < self.owner.avoidance_radius**2:
-                delta_v-=separation
+        # Fly towards the middle
+        delta_v+=separation*self.owner.flock_attraction
 
-            # Try to match speed with nearby boids
-            if separation_sq < self.owner.formation_flying_radius**2:
-                delta_v+=(other.velocity-self.velocity)*self.owner.speed_matching_strength
+        # Fly away from nearby boids
+        if separation_sq < self.owner.avoidance_radius**2:
+            delta_v-=separation
+
+        # Try to match speed with nearby boids
+        if separation_sq < self.owner.formation_flying_radius**2:
+            delta_v+=(other.velocity-self.velocity)*self.owner.speed_matching_strength
 
         return delta_v
+        
+    def get_color(self):
+        return self.color
 
+# Will now add an Eagle to Boids
+class Eagle(Boid):
+    def __init__(self, x, y, xv, yv, owner):
+        Boid.__init__(self, x, y, xv, yv, owner)
+        self.color = (1,0,0)
+
+    def interaction(self, other):
+        delta_v = array([0.0,0.0])
+        separation = other.position-self.position
+        separation_sq = separation.dot(separation)
+
+        # Hunt the boids
+        delta_v+=separation*self.owner.eagle_hunt_strength
+
+        return delta_v
 
 # Deliberately terrible code for teaching purposes
 class Boids(object):
@@ -66,7 +78,7 @@ class Boids(object):
                 random.uniform(-20.0,20.0),self) for i in range(count)]
 
     def add_eagle(self,x,y,xv,yv):
-        self.boids.append(Boid(x,y,xv,yv,self,species="Eagle"))
+        self.boids.append(Eagle(x,y,xv,yv,self))
 
     def initialise_from_data(self,data):
         self.boids=[Boid(x,y,xv,yv,self) for x,y,xv,yv in zip(*data)]
@@ -80,5 +92,3 @@ class Boids(object):
             me.velocity+=delta_v
             # Move according to velocities
             me.position+=me.velocity
-
-
