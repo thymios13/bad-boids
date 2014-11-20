@@ -72,7 +72,7 @@ class Boids(object):
         self.eagle_avoidance_radius = eagle_avoidance_radius
         self.eagle_fear = eagle_fear
         self.eagle_hunt_strength = eagle_hunt_strength
-
+        self.boids = ()
 
     def initialise_random(self, count):
         self.boids = [Boid(random.uniform(-450, 50.0),
@@ -84,7 +84,7 @@ class Boids(object):
         self.boids.append(Eagle(x, y, xv, yv, self))
 
     def initialise_from_data(self, data):
-        self.boids = [Boid(x, y, xv, yv, self) for x, y, xv, yv in zip(*data)]
+        self.boids = [Boid(x, y, xv, yv, self) for x, y, xv, yv in data]
 
     def update(self):
         for me in self.boids:
@@ -98,16 +98,6 @@ class Boids(object):
             # Move according to velocities
             me.position += me.velocity
 
-# Initialize some boids.
-boids = Boids(
-    flock_attraction=0.01 / 50,
-    avoidance_radius=10,
-    formation_flying_radius=100,
-    speed_matching_strength=0.125 / 50
-)
-
-boids.initialise_random(50)
-boids.add_eagle(0, 0, 0, 50)
 
 def update_boids(all_boids):
     all_boids.update()
