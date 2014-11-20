@@ -1,6 +1,7 @@
 import yaml
 import boids
 from copy import deepcopy
+
 before=deepcopy(boids.boids)
 boids.update_boids(boids.boids)
 after=boids.boids
